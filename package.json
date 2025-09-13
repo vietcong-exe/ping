@@ -1,0 +1,13 @@
+{
+  "name": "ping-api",
+  "version": "1.0.0",
+  "description": "API para medir latência HTTP (ping) de sites",
+  "main": "api/ping.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "node api/ping.js"
+  },
+  "keywords": ["ping", "latencia", "vercel", "api"],
+  "author": "",
+  "license": "MIT"
+}
