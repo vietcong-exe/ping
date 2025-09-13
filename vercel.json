@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/:host",
+      "destination": "/api/ping?host=:host"
+    }
+  ]
+}
