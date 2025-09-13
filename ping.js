@@ -1,30 +1,21 @@
-// instale dependências primeiro:
-// npm init -y
-// npm install express ping
+export default async function handler(req, res) {
+  const { host } = req.query;
 
-const express = require("express");
-const ping = require("ping");
-
-const app = express();
-const PORT = 3000;
-
-// Rota dinâmica: /dominio.com
-app.get("/:host", async (req, res) => {
-  const host = req.params.host;
+  if (!host) {
+    return res.status(400).json({ error: "Informe um host, exemplo: /api/ping?host=google.com" });
+  }
 
   try {
-    const result = await ping.promise.probe(host, { timeout: 5 });
+    const url = host.startsWith("http") ? host : `https://${host}`;
 
-    if (result.alive) {
-      res.json({ ping: result.time ? parseFloat(result.time) : null });
-    } else {
-      res.status(400).json({ error: `Não foi possível pingar ${host}` });
-    }
+    const start = Date.now();
+    await fetch(url, { method: "HEAD" }); // HEAD é mais rápido que GET
+    const end = Date.now();
+
+    const latency = end - start;
+
+    res.status(200).json({ ping: latency });
   } catch (err) {
-    res.status(500).json({ error: "Erro interno", details: err.message });
+    res.status(500).json({ error: "Falha ao medir ping", details: err.message });
   }
-});
-
-app.listen(PORT, () => {
-  console.log(`API rodando em http://localhost:${PORT}`);
-});
+}
